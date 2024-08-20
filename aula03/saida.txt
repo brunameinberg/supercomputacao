@@ -1,0 +1,4 @@
+Número total de palavras: 48
+Número total de linhas: 7
+Número médio de palavras por linha: 6.85714
+Palavra mais frequente: quero (Frequência: 10)
