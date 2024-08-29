@@ -1,0 +1,6 @@
+Qual entrada você quer? (coloque somente o número) 
+1- entrada1 
+2- entrada2 
+3- entrada3 
+4- entrada4 
+Esse arquivo não está disponível!
