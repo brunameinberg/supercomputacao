@@ -6,7 +6,7 @@
 #include <algorithm>  // Inclui a biblioteca para algoritmos de uso geral, como find, sort, etc.
 #include <random>
 #include <functional> // Para std::bind
-#include <chrono>
+#include <chrono> //para seed aleatória
 
 using namespace std; 
 
@@ -37,45 +37,24 @@ void construa_vetores(const string& nome_arquivo, vector<int>& pesos, vector<int
     entrada.close(); 
 }
 
-void embaralha_vetores(vector<int>& pesos, vector<int>& valores){
 
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, pesos.size() - 1);
-    auto dice = std::bind ( distribution, generator );
-
-    std::vector<int> indices(pesos.size());
-    for (int i = 0; i < indices.size(); ++i) {
-        indices[i] = i;
-    }
-
-    for (int i = indices.size() - 1; i > 0; --i) {
-        int j = dice() % (i + 1);  
-        std::swap(indices[i], indices[j]);
-    }
-
-    std::vector<int> pesos_embaralhados(pesos.size());
-    std::vector<int> valores_embaralhados(valores.size());
-    
-     for (int i = 0; i < indices.size(); ++i) {
-        pesos_embaralhados[i] = pesos[indices[i]];
-        valores_embaralhados[i] = valores[indices[i]];
-    }
-
-    pesos = pesos_embaralhados;
-    valores = valores_embaralhados;
-
-    
-}
-
-vector<int> enche_mochila(const vector<int>& pesos, const vector<int>& valores, int capacidade) {
+vector<int> enche_mochila(const vector<int>& pesos, const vector<int>& valores, int capacidade, default_random_engine& generator) {
 
     vector<int> resultados;
     int peso_total = 0;
     int valor_total = 0;
 
+    std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    auto dice = std::bind ( distribution, generator );
+
     for (int i = 0; i < pesos.size(); i++){
         //cout << capacidade << "\n";
-        if (capacidade > pesos[i]){
+
+        // gerando um número de probabilidade aleatório
+        double valor_aleatorio = distribution(generator);
+        //cout << valor_aleatorio << "\n";
+
+        if (capacidade > pesos[i] && valor_aleatorio > 0.5){
             //cout << "entrei aqui \n";
             peso_total = peso_total + pesos[i];
             valor_total = valor_total + valores[i];
@@ -94,20 +73,16 @@ vector<int> enche_mochila(const vector<int>& pesos, const vector<int>& valores, 
     
 }
 
-void real_main(vector<int>& vecpesos, vector<int>& vecvalores, int capacidade){
+void real_main(vector<int>& vecpesos, vector<int>& vecvalores, int capacidade, default_random_engine& generator){
 
-    embaralha_vetores(vecpesos, vecvalores);
 
     vector<int> resultado;
-    resultado = enche_mochila(vecpesos, vecvalores, capacidade);
+    resultado = enche_mochila(vecpesos, vecvalores, capacidade, generator);
 
-    
-    cout << "melhor peso:";
+    cout << "melhor peso: ";
     cout << resultado[0];
-    cout << "melhor valor:";
+    cout << "melhor valor: ";
     cout << resultado[1] << endl;
-    
-
 
 }
 
@@ -135,14 +110,19 @@ int main() {
 
     construa_vetores(nomedoarquivo, vecpesos, vecvalores, capacidade);
 
-    for (int i = 0; i <= 5; i++){
-        real_main(vecpesos, vecvalores, capacidade);
+    //coloquei essa parte na main, porque não estava sendo aleatório entre as rodagens
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator(seed);
+
+    for (int i = 0; i < 5; i++){
+        real_main(vecpesos, vecvalores, capacidade, generator);
     }
 
     auto end = chrono::high_resolution_clock::now(); 
 
     chrono::duration<double> duration = end - start;
     cout << "Tempo de execução: " << duration.count() << " segundos" << endl;
+
 
     return 0;
 }

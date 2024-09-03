@@ -1,0 +1,7 @@
+melhor peso:590melhor valor:511
+melhor peso:593melhor valor:457
+melhor peso:597melhor valor:503
+melhor peso:593melhor valor:484
+melhor peso:598melhor valor:496
+melhor peso:594melhor valor:526
+Tempo de execução: 0.00161607 segundos

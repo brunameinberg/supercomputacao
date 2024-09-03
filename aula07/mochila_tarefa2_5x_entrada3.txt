@@ -1,0 +1,6 @@
+melhor peso: 259melhor valor: 1888
+melhor peso: 229melhor valor: 1736
+melhor peso: 195melhor valor: 1438
+melhor peso: 174melhor valor: 1450
+melhor peso: 202melhor valor: 1570
+Tempo de execução: 0.00176369 segundos
