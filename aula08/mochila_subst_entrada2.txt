@@ -1,0 +1,21 @@
+Melhor valor após substituição: 575
+Capacidade restante: 195
+Melhor valor após substituição: 452
+Capacidade restante: 261
+Melhor valor após substituição: 327
+Capacidade restante: 290
+Melhor valor após substituição: 327
+Capacidade restante: 289
+Melhor valor após substituição: 452
+Capacidade restante: 226
+Melhor valor após substituição: 452
+Capacidade restante: 226
+Melhor valor após substituição: 635
+Capacidade restante: 138
+Melhor valor após substituição: 635
+Capacidade restante: 141
+Melhor valor após substituição: 452
+Capacidade restante: 265
+Melhor valor após substituição: 452
+Capacidade restante: 227
+Tempo de execução: 0.00245215 segundos

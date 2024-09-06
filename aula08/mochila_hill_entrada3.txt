@@ -1,0 +1,21 @@
+Melhor valor após Hill Climbing: 460
+Solução: 110111011111111001010000011000
+Melhor valor após Hill Climbing: 425
+Solução: 111111001110011100110000101000
+Melhor valor após Hill Climbing: 435
+Solução: 111011111101110001010101011000
+Melhor valor após Hill Climbing: 459
+Solução: 111100111101000101100110111000
+Melhor valor após Hill Climbing: 437
+Solução: 011100111110100110110100001000
+Melhor valor após Hill Climbing: 466
+Solução: 111111111101010001010100011010
+Melhor valor após Hill Climbing: 536
+Solução: 111111111001111010001100111110
+Melhor valor após Hill Climbing: 397
+Solução: 001010101111011000010011111010
+Melhor valor após Hill Climbing: 424
+Solução: 111101000011010101110010101101
+Melhor valor após Hill Climbing: 448
+Solução: 101010010110010011110011011011
+Tempo de execução: 0.00234785 segundos
