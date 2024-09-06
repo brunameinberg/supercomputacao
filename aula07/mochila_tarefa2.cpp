@@ -96,7 +96,7 @@ int main() {
     vector<int> vecvalores;
     int capacidade;
 
-    string numarquivo = "4";
+    string numarquivo = "1";
     //cout << "Qual entrada você quer? (coloque somente o número) \n";
     //cout << "1- entrada1 \n2- entrada2 \n3- entrada3 \n4- entrada4 \n";
     //cin >> numarquivo;
@@ -114,7 +114,7 @@ int main() {
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator(seed);
 
-    for (int i = 0; i < 5; i++){
+    for (int i = 0; i < 1000000; i++){
         real_main(vecpesos, vecvalores, capacidade, generator);
     }
 

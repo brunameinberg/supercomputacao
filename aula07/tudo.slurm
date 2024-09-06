@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=mochila         # Nome do job
-#SBATCH --output=mochila_tarefa2_5x_entrada4.txt   # Gera um novo arquivo de saída a cada execução
+#SBATCH --output=mochila_tarefa2_1000000x_entrada1.txt   # Gera um novo arquivo de saída a cada execução
 #SBATCH --ntasks=1                               # Número de tarefas (apenas 1 processos)
 #SBATCH --cpus-per-task=1                        # Número de threads por tarefa (apenas 1 thread por processo)
 #SBATCH --mem=512MB                             # Memória total alocada por nó (512 MB)
