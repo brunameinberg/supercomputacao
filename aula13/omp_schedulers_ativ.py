@@ -22,5 +22,5 @@ df_results = pd.DataFrame({
     "Tempo Médio (s)": mean_times
 })
 
-# Exibe os resultados
-import ace_tools as tools; tools.display_dataframe_to_user(name="Scheduler Execution Times", dataframe=df_results)
+# Exibe os resultados de forma simples no terminal
+print(df_results)
