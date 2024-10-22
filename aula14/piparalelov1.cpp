@@ -16,14 +16,13 @@ int main() {
 
     int pontosdentro; 
     pontosdentro= 0;
-    
-    srand(static_cast<unsigned int>(time(0)));
+
     
     #pragma omp parallel for reduction(+:pontosdentro)
     for (int i = 0; i < n_pontos; i++) {
-        unsigned int seed = time(NULL) ^ (omp_get_thread_num() * i);
-        double x = static_cast<double>(rand_r(&seed)) / RAND_MAX;
-        double y = static_cast<double>(rand_r(&seed)) / RAND_MAX;
+        
+        double x = static_cast<double>(rand()) / RAND_MAX;
+        double y = static_cast<double>(rand()) / RAND_MAX;
 
         if (x * x + y * y <= 1.0) {
             pontosdentro++;

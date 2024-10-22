@@ -1,0 +1,2 @@
+Valor estimado de Pi (paralelizado): 3.13936
+Tempo de execução (paralelizado): 0.0161417 segundos

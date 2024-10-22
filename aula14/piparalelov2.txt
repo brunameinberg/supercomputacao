@@ -1,0 +1,2 @@
+Valor estimado de Pi (com melhoria de paralelização): 3.1472
+Tempo de execução (com melhoria de paralelização): 0.00498059 segundos
