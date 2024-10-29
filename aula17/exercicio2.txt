@@ -1,0 +1,5 @@
+Processo 2 obteve resultado: 501500
+Processo raiz configurou num_interacoes para: 1000
+Processo 0 obteve resultado: 499500
+Processo 1 obteve resultado: 500500
+Processo 3 obteve resultado: 502500
