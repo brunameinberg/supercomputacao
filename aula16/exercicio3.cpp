@@ -20,17 +20,12 @@ int main(int argc, char **argv){
         strcpy(message, "oiii");
        
         MPI_Send(message, strlen(message), MPI_CHAR, 1, type, MPI_COMM_WORLD);
-    
-        MPI_Recv(message, strlen(message), MPI_CHAR, size-1, type, MPI_COMM_WORLD, &status);
-        cout << "Message from node" << size-1 << ":" << message << endl;
-
 
     }
     else{
         
         
             MPI_Recv(message, strlen(message), MPI_CHAR, rank - 1, type, MPI_COMM_WORLD, &status);
-            cout << "Message from node" << rank - 1 << ":" << message << endl;
 
             if (rank != size - 1){
                 MPI_Send(message, strlen(message), MPI_CHAR, rank + 1, type, MPI_COMM_WORLD);
@@ -38,6 +33,7 @@ int main(int argc, char **argv){
 
             if (rank == size - 1){
                 MPI_Send(message, strlen(message), MPI_CHAR, 0, type, MPI_COMM_WORLD);
+                cout << "Message from node" << rank - 1 << ":" << message << endl;
             }
 
     
