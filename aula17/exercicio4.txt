@@ -1,0 +1,2 @@
+maximo:  9967345
+Desvio padrão global: 5.53727e+06

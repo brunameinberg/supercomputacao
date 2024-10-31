@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <ctime>
+#include <cmath>
 
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
@@ -40,35 +41,63 @@ int main(int argc, char* argv[]) {
 
     }
 
-    MPI_Bcast(&maximo, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
-
     int chunk_size = ARRAY_SIZE / size;
-    double recv_array[chunk_size];
+    int recv_array[chunk_size];
 
     MPI_Scatter(array, chunk_size, MPI_INT, recv_array, chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
 
+    double soma = 0;
+    double media = 0;
 
     for (int i = 0; i < chunk_size; i++) {
-        recv_array[i] = static_cast<double>(recv_array[i]) / maximo;
+       soma = soma + recv_array[i];
     }
 
-    std::vector<double> normalized_array;
-    if (rank == 0) {
-        normalized_array.resize(ARRAY_SIZE);
+
+    media = soma / chunk_size;
+
+
+    double soma_quadrados = 0.0;
+
+    for (int i = 0; i < chunk_size; i++) {
+        soma_quadrados += (recv_array[i]  - media) * (recv_array[i]  - media);
     }
 
-    MPI_Gather(recv_array, chunk_size, MPI_DOUBLE, normalized_array.data(), chunk_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    double variancia = 0;
+    variancia = soma_quadrados / chunk_size;
+
+
+    double medias[size];
+    double variancias[size];
+
+   
+    MPI_Gather(&media, 1, MPI_DOUBLE, medias, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&variancia, 1, MPI_DOUBLE, variancias, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
     
     if (rank == 0) {
-        std::cout << "Array normalizado: ";
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            std::cout << normalized_array[i] << " ";
+
+        double media_global = 0.0;
+
+        for (int i = 0; i < size; i++) {
+            media_global += medias[i];
         }
-        std::cout << std::endl;
+
+        media_global = media_global / size;
+
+        double variancia_global = 0.0;
+
+        for (int i = 0; i < size; i++) {
+            variancia_global += variancias[i] + (medias[i] - media_global) * (medias[i] - media_global);
+        }
+        variancia_global = variancia_global / size;
+
+        double desvio_padrao_global = std::sqrt(variancia_global);
+        
+        std::cout << "Desvio padrão global: " << desvio_padrao_global << std::endl;
+
     }
         
-    
 
     MPI_Finalize();
     return 0;
