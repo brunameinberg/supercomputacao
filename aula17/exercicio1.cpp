@@ -1,46 +1,38 @@
+// Comunicação entre dois processos
+
 #include <iostream>
+#include <cstring>
 #include <mpi.h>
 
-int main(int argc, char* argv[]) {
+using namespace std;
+
+int main(int argc, char **argv){
+    char message[5];
+    int rank, size, type = 99;
+    char message2[3];
+
+    MPI_Status status;
+
     MPI_Init(&argc, &argv);
-
-    int rank, size;
-    int media = 0;
-    int i;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    const int ARRAY_SIZE = 100;
-    int array[ARRAY_SIZE];
+    if (rank == 0){
+        strcpy(message, "Olá");
+        MPI_Send(message, strlen(message), MPI_CHAR, 1, type, MPI_COMM_WORLD);
 
-    if (rank == 0) {
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = i;
-        }
+        MPI_Recv(message2, strlen(message2), MPI_CHAR, 1, type, MPI_COMM_WORLD, &status);
+        cout << "Message from node " << rank << ": " << message2 << endl;
     }
-
-    int chunk_size = ARRAY_SIZE / size;
-    int recv_array[chunk_size];
-
-    MPI_Scatter(array, chunk_size, MPI_INT, recv_array, chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
-
-    if (rank != 0 ){
-        MPI_Gather(recv_array, chunk_size, MPI_INT, recv_array, chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
-    // Imprime o vetor recebido
+    else if (rank == 1) {
+        MPI_Recv(message, strlen(message), MPI_CHAR, 0, type, MPI_COMM_WORLD, &status);
+        cout << "Message from node " << rank << ": " << message << endl;
         
-        std::cout << "Rank " << rank << " recebeu: ";
-        for (i = 0; i < chunk_size; i++) {
-            std::cout << recv_array[i] << " ";
-            media = media + recv_array[i];
-        }
-        std::cout << std::endl;
-        std::cout << "i:" << i << std::endl;
-        int media_final = media / i;
-        std::cout << "media: " << media_final << std::endl;
-        
+        strcpy(message2, "Oi");
+        MPI_Send(message2, strlen(message2), MPI_CHAR, 0, type, MPI_COMM_WORLD);
     }
-    
 
     MPI_Finalize();
     return 0;
+
 }
