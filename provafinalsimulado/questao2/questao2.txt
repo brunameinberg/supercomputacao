@@ -1,0 +1,1 @@
+Soma total dos quadrados: 1990967285

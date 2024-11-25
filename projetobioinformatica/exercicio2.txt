@@ -1,0 +1,16 @@
+Arquivo lido: primeiras 5 letras do buffer: NNNNN
+
+Tamanho total do buffer: 249250621
+Configuração inicial no processo 0:
+sendCounts: 62312656 62312655 62312655 62312655 
+displs: 0 62312656 124625311 186937966 
+Processo 1: primeiras 5 letras do buffer local recebido: AAAGG
+Processo 2: primeiras 5 letras do buffer local recebido: NNNNN
+Processo 0: primeiras 5 letras do buffer local recebido: NNNNN
+Processo 3: primeiras 5 letras do buffer local recebido: taatt
+Transcrição concluída: primeiras 5 letras do buffer transcrito: CUUAA
+Transcrição concluída: primeiras 5 letras do buffer transcrito: GCCAG
+Transcrição concluída: primeiras 5 letras do buffer transcrito: AUUGG
+Transcrição concluída: primeiras 5 letras do buffer transcrito: CUAGU
+RNA salvo: primeiras 5 letras do buffer: AUUGG
+Transcrição completa. RNA salvo em: dados/saidas/saida_rna_ex_2.fa

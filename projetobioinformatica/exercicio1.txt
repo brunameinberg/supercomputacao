@@ -1,0 +1,5 @@
+Contagem de bases no DNA:
+A: 63339079
+T: 63436193
+C: 43864238
+G: 43867185

@@ -1,0 +1,1 @@
+Time taken for matrix multiplication: 0.897027 seconds.
