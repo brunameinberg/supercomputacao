@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
     int globalCount = 0;
 
     if (rank == 0){
-        string nomeArquivo = "dados/saidas/saida_rna_ex_2.fa";
+        string nomeArquivo = "dados/saidas/saida_rna_subst.fa";
         LerArquivoRNA(nomeArquivo, buffer, lengths, displs);
 
         for (int i = 0; i < size; ++i) {

@@ -1,0 +1,14 @@
+Parte B (0,75 ponto): O conceito de balanceamento de carga em computação 
+paralela refere-se à distribuição equitativa do trabalho entre todos os 
+processadores ou núcleos disponíveis em um sistema de computação paralelo. 
+Por que é importante? Quais técnicas podem ser usadas para alcançar um 
+balanceamento efetivo?
+
+Resposta:
+
+Um dos principais aspectos do cluster é a utilização do SLURM para o 
+gerenciamento de recursos. O SLURM funciona como um administrador,
+possibilitando uma distribuição otimizada da máquina. Quando há várias 
+submissões de jobs ao mesmo tempo, pode ser que os recursos não sejam 
+suficientes. Por outro lado, pode ser que esses recursos estejam 
+disponíveis, mas só se houver uma organização desses recursos.

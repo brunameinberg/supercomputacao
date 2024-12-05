@@ -29,12 +29,6 @@ void LerArquivo(const string& nomeArquivo, vector<char>& buffer) {
 
     arquivo.close();
 
-    cout << "Arquivo lido: primeiras 5 letras do buffer: ";
-    for (size_t i = 0; i < min(buffer.size(), size_t(5)); ++i) {
-        cout << buffer[i];
-    }
-    cout << endl;
-    cout << "\nTamanho total do buffer: " << buffer.size() << endl;
 }
 
 
@@ -67,11 +61,6 @@ void Transcricao(const vector<char>& inputBuffer, vector<char>& outputBuffer) {
         outputBuffer.insert(outputBuffer.end(), localBuffer.begin(), localBuffer.end());
     }
 
-    cout << "Transcrição concluída: primeiras 5 letras do buffer transcrito: ";
-    for (size_t i = 0; i < min(outputBuffer.size(), size_t(5)); ++i) {
-        cout << outputBuffer[i];
-    }
-    cout << endl;
 }
 
 void SalvarRNA(const string& nomeArquivo, const vector<char>& buffer) {
@@ -87,78 +76,48 @@ void SalvarRNA(const string& nomeArquivo, const vector<char>& buffer) {
 
     arquivo.close();
 
-    cout << "RNA salvo: primeiras 5 letras do buffer: ";
-    for (size_t i = 0; i < min(buffer.size(), size_t(5)); ++i) {
-        cout << buffer[i];
-    }
-    cout << endl;
+    cout << "RNA salvo" << endl;
 }
 
 
-
-int main(int argc, char* argv[]){
-
-    MPI_Init(&argc, &argv);
-
-    int rank, size;
-
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    vector<char> buffer;  
+void ProcessarArquivo(int rank, int size, const string& nomeArquivo) {
+    vector<char> buffer;        
     vector<char> localBuffer;      
     vector<char> transcribedBuffer;        
-       
+
     int totalSize = 0;
     vector<int> sendCounts(size, 0);
     vector<int> displs(size, 0);
 
-    if (rank == 0){
-        string nomeArquivo = "dados/chr1.subst.fa";
-        LerArquivo(nomeArquivo, buffer);
+    // Lendo o arquivo
+    LerArquivo(nomeArquivo, buffer);
 
-        totalSize = buffer.size();
-        int baseSize = totalSize / size;
-        int remainder = totalSize % size;
+    totalSize = buffer.size();
+    int baseSize = totalSize / size;
+    int remainder = totalSize % size;
 
-        int currentDisplacement = 0;
+    int currentDisplacement = 0;
 
-        for (int i = 0; i < size; ++i) {
-            if (i < remainder) {
-                sendCounts[i] = baseSize + 1;  
-            } else {
-                sendCounts[i] = baseSize;     
-            }
-            displs[i] = currentDisplacement;
-
-            currentDisplacement += sendCounts[i];
+    for (int i = 0; i < size; ++i) {
+        if (i < remainder) {
+            sendCounts[i] = baseSize + 1;
+        } else {
+            sendCounts[i] = baseSize;
         }
+        displs[i] = currentDisplacement;
 
-        cout << "Configuração inicial no processo 0:" << endl;
-        cout << "sendCounts: ";
-        for (int count : sendCounts) cout << count << " ";
-        cout << endl;
-
-        cout << "displs: ";
-        for (int disp : displs) cout << disp << " ";
-        cout << endl;
+        currentDisplacement += sendCounts[i];
     }
 
     MPI_Bcast(&totalSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(sendCounts.data(), size, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(displs.data(), size, MPI_INT, 0, MPI_COMM_WORLD);
-    
+
     int localBufferSize = sendCounts[rank];
     localBuffer.resize(localBufferSize);
 
     MPI_Scatterv(buffer.data(), sendCounts.data(), displs.data(), MPI_CHAR,
                  localBuffer.data(), localBufferSize, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    cout << "Processo " << rank << ": primeiras 5 letras do buffer local recebido: ";
-    for (size_t i = 0; i < min(localBuffer.size(), size_t(5)); ++i) {
-        cout << localBuffer[i];
-    }
-    cout << endl;
 
     Transcricao(localBuffer, transcribedBuffer);
 
@@ -182,17 +141,32 @@ int main(int argc, char* argv[]){
     MPI_Gatherv(transcribedBuffer.data(), localTranscribedSize, MPI_CHAR,
                 finalBuffer.data(), transcribedSizes.data(), transcribedDispls.data(), MPI_CHAR, 0, MPI_COMM_WORLD);
 
-
     if (rank == 0) {
-        string nomeArquivoRNA = "dados/saidas/saida_rna_ex_2.fa";
+        string nomeArquivoRNA = "dados/saidas/saida_rna_" + nomeArquivo.substr(11, 5) + ".fa";
         SalvarRNA(nomeArquivoRNA, finalBuffer);
         cout << "Transcrição completa. RNA salvo em: " << nomeArquivoRNA << endl;
+    }
+}
+
+
+int main(int argc, char* argv[]) {
+
+    MPI_Init(&argc, &argv);
+
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    int numArquivos = 22;
+    vector<string> arquivos(numArquivos);
+    for (int i = 0; i < numArquivos; ++i) {
+        arquivos[i] = "dados/chr" + to_string(i + 1) + ".subst.fa";
+    }
+
+    for (const string& arquivo : arquivos) {
+        ProcessarArquivo(rank, size, arquivo);
     }
 
     MPI_Finalize();
     return 0;
-
-
-
 }
-

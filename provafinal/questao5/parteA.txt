@@ -1,0 +1,22 @@
+Parte A (0,75 ponto): Descreva com suas palavras o que é paralelismo, 
+diferenciando-o do processamento sequencial. Relacione sua reposta com 
+o conceito de escalabilidade.
+
+Resposta:
+
+O conceito de paralelismo é baseado na utilização de mais de um processador
+para a execução de um código. Esse é um método vantajoso para a soluções que
+precisam de muito tempo/espaço para serem resolvidas. Um processamento sequencial,
+por outro lado, utiliza-se de apenas um processador, no qual as tarefas são
+resolvidas em ordem/sequencia. Existem dois tipo de paralelismo, o de dados
+e de tarefas. Enquanto o paralelismo de dados divide um vetor (por exemplo)
+entre vários processadores (como o MPI), o paralelimso de tarefas é feito com
+vários processadores, executanto coisas iguais (ou diferentes) com esses mesmos
+dados (como o OpenMP).
+No nosso curso, utilizamos o Cluster para realizar a paralelização, dentro
+do cluster, existe uma espécie de gerenciador para as tarefas submetidas, o SLURM.
+O SLURM possibilita uma utilização otimizada dos recursos da máquina. 
+Parte disso, é a forma que submetemos essas tarefas para a máquina, afinal
+as necessidades do código vão depender do que se pede. Por isso, por mais
+que se tenha uma máquina muito eficiente, é necessário entender a melhor forma
+de paralelizar o seu código para não disperdiçar recursos limitados.
