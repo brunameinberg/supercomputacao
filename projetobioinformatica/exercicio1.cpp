@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 void LerArquivo(const string& nomeArquivo, vector<char>& buffer, vector<int>& lengths, vector<int>& displs) {
     ifstream arquivo(nomeArquivo);
     if (!arquivo.is_open()) {
@@ -46,25 +45,19 @@ void LerArquivo(const string& nomeArquivo, vector<char>& buffer, vector<int>& le
     arquivo.close();
 }
 
-
 void ContarBases(const vector<char>& buffer, int start, int length, vector<int>& contagemBases) {
-
     int localA = 0, localT = 0, localC = 0, localG = 0;
 
     #pragma omp parallel for reduction(+:localA, localT, localC, localG)
     for (int i = 0; i < length; ++i) {
-
         char base = buffer[start + i];
-        if (base == 'A' || base == 'a'){
+        if (base == 'A' || base == 'a') {
             localA++;
-        }
-        else if (base == 'T' || base == 't'){
+        } else if (base == 'T' || base == 't') {
             localT++;
-        } 
-        else if (base == 'C' || base == 'c'){
+        } else if (base == 'C' || base == 'c') {
             localC++;
-        }
-        else if (base == 'G' || base == 'g'){
+        } else if (base == 'G' || base == 'g') {
             localG++;
         }
     }
@@ -75,11 +68,7 @@ void ContarBases(const vector<char>& buffer, int start, int length, vector<int>&
     contagemBases[3] = localG;
 }
 
-
-
-
-
-void ProcessarArquivo(int rank, int size, const string& nomeArquivo) {
+void ProcessarArquivo(int rank, int size, const string& nomeArquivo, vector<int>& totalBases) {
     vector<char> buffer;        
     vector<int> lengths;       
     vector<int> displs;         
@@ -117,6 +106,11 @@ void ProcessarArquivo(int rank, int size, const string& nomeArquivo) {
         cout << "T: " << globalCount[1] << endl;
         cout << "C: " << globalCount[2] << endl;
         cout << "G: " << globalCount[3] << endl;
+
+        // Acumulando os totais
+        for (int i = 0; i < 4; ++i) {
+            totalBases[i] += globalCount[i];
+        }
     }
 }
 
@@ -133,11 +127,21 @@ int main(int argc, char* argv[]) {
         arquivos[i] = "dados/chr" + to_string(i + 1) + ".subst.fa";
     }
 
+    // Totalizadores globais
+    vector<int> totalBases(4, 0);  // Apenas no processo rank == 0
+
     for (const string& arquivo : arquivos) {
-        ProcessarArquivo(rank, size, arquivo);
+        ProcessarArquivo(rank, size, arquivo, totalBases);
+    }
+
+    if (rank == 0) {
+        cout << "\nContagem total de bases em todos os arquivos:" << endl;
+        cout << "A: " << totalBases[0] << endl;
+        cout << "T: " << totalBases[1] << endl;
+        cout << "C: " << totalBases[2] << endl;
+        cout << "G: " << totalBases[3] << endl;
     }
 
     MPI_Finalize();
     return 0;
 }
-

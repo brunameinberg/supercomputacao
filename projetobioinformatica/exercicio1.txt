@@ -108,3 +108,9 @@ A: 8776181
 T: 8738261
 C: 7758796
 G: 7752671
+
+Contagem total de bases em todos os arquivos:
+A: 763517118
+T: 764606176
+C: 511685713
+G: 511971484
